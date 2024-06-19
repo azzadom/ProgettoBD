@@ -15,6 +15,6 @@ public class PersonalTrainer extends Persona{
 
     @Override
     public String toString(){
-        return super.toString() + " | Clienti: " + this.numClienti + "\n";
+        return super.toString() + " | Clienti: " + this.numClienti;
     }
 }
