@@ -1,6 +1,6 @@
 package controller;
 
-import dao.LoginDAO;
+import engineering.LoginFacadeDAO;
 import exception.DAOException;
 import model.Credenziali;
 import view.LoginView;
@@ -9,14 +9,14 @@ public class LoginController implements Controller{
 
     private Credenziali cred;
     private final LoginView view;
-    private final LoginDAO dao;
+    private final LoginFacadeDAO dao;
 
     private boolean newPassword;
 
     public LoginController() {
         view = new LoginView();
         newPassword = false;
-        dao = new LoginDAO();
+        dao = new LoginFacadeDAO();
     }
 
     public void start() {

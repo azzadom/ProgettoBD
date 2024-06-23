@@ -1,7 +1,7 @@
 package controller;
 
-import dao.ConnectionFactory;
-import dao.ProprietarioDAO;
+import dao.ConnectionSingleton;
+import engineering.ProprietarioFacadeDAO;
 import exception.DAOException;
 import model.*;
 import view.ProprietarioView;
@@ -11,17 +11,17 @@ import java.util.List;
 public class ProprietarioController implements Controller{
 
     private final ProprietarioView view;
-    private final ProprietarioDAO dao;
+    private final ProprietarioFacadeDAO dao;
 
     public ProprietarioController() {
         view = new ProprietarioView();
-        dao = new ProprietarioDAO();
+        dao = new ProprietarioFacadeDAO();
     }
 
     @Override
     public void start() {
         try {
-            ConnectionFactory.changeRole(Ruolo.PROPRIETARIO);
+            ConnectionSingleton.changeRole(Ruolo.PROPRIETARIO);
         } catch(DAOException e) {
             throw new RuntimeException(e);
         }

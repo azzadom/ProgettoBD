@@ -1,0 +1,6 @@
+
+˜	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Şùºùÿÿÿÿ8æ‰—¨„2J$5c95fa28-5106-4b01-9a24-f37661f04f7e
+‹
+java:S2095"OUse try-with-resources or close this "CallableStatement" in a "finally" clause.(¦‘ªJ$1b79d9b2-86f1-4af0-a86d-fb560b8fb4f1
+|
+java:S1128"4Remove this unused import 'dao.GenericProcedureDAO'.(®ì—›øÿÿÿÿ8ƒ¹—¨„2J$3edd8cc4-5de5-403a-93a7-689a78179cf7

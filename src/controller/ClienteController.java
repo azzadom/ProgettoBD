@@ -1,7 +1,7 @@
 package controller;
 
-import dao.ClienteDAO;
-import dao.ConnectionFactory;
+import engineering.ClienteFacadeDAO;
+import dao.ConnectionSingleton;
 import model.*;
 import view.ClienteView;
 import exception.DAOException;
@@ -17,17 +17,17 @@ public class ClienteController implements Controller{
 
     private final ClienteView view;
     private final String CF;
-    private final ClienteDAO clienteDAO;
+    private final ClienteFacadeDAO clienteDAO;
 
     public ClienteController(String CF) {
         this.view = new ClienteView();
         this.CF = CF;
-        this.clienteDAO = new ClienteDAO();
+        this.clienteDAO = new ClienteFacadeDAO();
     }
 
     public void start() {
         try {
-            ConnectionFactory.changeRole(Ruolo.CLIENTE);
+            ConnectionSingleton.changeRole(Ruolo.CLIENTE);
         } catch(DAOException e) {
             throw new RuntimeException(e);
         }
@@ -158,16 +158,15 @@ public class ClienteController implements Controller{
             view.showMessage(sb.toString());
 
             Integer idScheda = view.schedaArchiviata();
-            for (SchedaArchiviata schedaArchiviata : lista) {
-                if (schedaArchiviata.getId().equals(idScheda)) {
-                    scheda = schedaArchiviata;
-                    break;
-                }
-            }
-            if (scheda == null) {
-                view.showError("Scheda non trovata!");
+
+            if (idScheda == null || idScheda <= 0 || idScheda > lista.size()) {
+                view.showError("Numero scheda non valido!");
                 return;
             }
+            scheda = lista.get(idScheda-1);
+
+            clienteDAO.schedaArchiviataEsercizi(CF, scheda);
+
             view.showMessage(scheda.toString());
 
         } catch(DAOException | DateTimeException e) {

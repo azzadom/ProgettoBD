@@ -1,7 +1,7 @@
 package controller;
 
-import dao.ConnectionFactory;
-import dao.PersonalTrainerDAO;
+import dao.ConnectionSingleton;
+import engineering.PersonalTrainerFacadeDAO;
 import model.*;
 import view.PersonalTrainerView;
 import exception.DAOException;
@@ -15,17 +15,17 @@ public class PersonalTrainerController implements Controller{
 
     private final String CF;
     private final PersonalTrainerView view;
-    private final PersonalTrainerDAO dao;
+    private final PersonalTrainerFacadeDAO dao;
 
     public PersonalTrainerController(String CF) {
         this.view = new PersonalTrainerView();
         this.CF = CF;
-        this.dao = new PersonalTrainerDAO();
+        this.dao = new PersonalTrainerFacadeDAO();
     }
 
     public void start() {
         try {
-            ConnectionFactory.changeRole(Ruolo.PERSONALTRAINER);
+            ConnectionSingleton.changeRole(Ruolo.PERSONALTRAINER);
         } catch(DAOException e) {
             throw new RuntimeException(e);
         }
