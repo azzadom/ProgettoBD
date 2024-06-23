@@ -67,6 +67,7 @@ public class PersonalTrainerController implements Controller{
 
         try {
             dao.aggiungiScheda(this.CF, scheda);
+            view.showMessage("Inserimento eseguito correttamente!");
         } catch(DAOException e) {
             view.showError(e.getMessage());
         }
