@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class LoginView extends AbstractView{
 
     public int showMenu(){
-        printMenu("MENU GENERALE", "Login", "Esci");
-        return getInputMenu(2);
+        printMenu("MENU GENERALE", "Login", "Cambia password", "Esci");
+        return getInputMenu(3);
     }
 
     public String[] authenticate() {

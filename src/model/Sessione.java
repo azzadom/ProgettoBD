@@ -64,6 +64,7 @@ public class Sessione {
         return Percentuale;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("- ").append("Data " + this.Data).append(" - ").append("Ora Inizio " + this.OraInizio).append(" - ").append("Durata " + this.Durata).append("\n")

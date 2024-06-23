@@ -48,6 +48,7 @@ public class Esercizio {
         return macchinario;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.index).append(" - ").append(this.nome).append(" | Serie: ").append(this.serie).append(" | Ripetizioni: ").append(this.ripetizioni).append(" | Macchinario: ").append(this.macchinario.getNome());

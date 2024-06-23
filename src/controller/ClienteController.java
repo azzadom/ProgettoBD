@@ -1,7 +1,7 @@
 package controller;
 
+import dao.ClienteDAO;
 import dao.ConnectionFactory;
-import dao.cliente.*;
 import model.*;
 import view.ClienteView;
 import exception.DAOException;
@@ -17,10 +17,12 @@ public class ClienteController implements Controller{
 
     private final ClienteView view;
     private final String CF;
+    private final ClienteDAO clienteDAO;
 
     public ClienteController(String CF) {
         this.view = new ClienteView();
         this.CF = CF;
+        this.clienteDAO = new ClienteDAO();
     }
 
     public void start() {
@@ -48,7 +50,7 @@ public class ClienteController implements Controller{
         SchedaAllenamento scheda;
 
         try {
-            scheda = new SchedaAllenamentoProcedureDAO().execute(CF);
+            scheda = clienteDAO.schedaCorrente(CF);
 
             if (scheda.getEsercizi().isEmpty()) {
                 view.showMessage("Non ci sono esercizi nella scheda!");
@@ -74,7 +76,7 @@ public class ClienteController implements Controller{
         int percentuale;
 
         try {
-            scheda = new SchedaAllenamentoProcedureDAO().execute(CF);
+            scheda = clienteDAO.schedaCorrente(CF);
         } catch (DAOException e) {
             view.showError(e.getMessage());
             return;
@@ -91,7 +93,7 @@ public class ClienteController implements Controller{
         data = new Date(System.currentTimeMillis());
         oraInizio = new Time(System.currentTimeMillis());
         view.showMessage("Data: "+ data + " | Ora inizio: "+ oraInizio);
-        for (int i = 0; i< numEsercizi; i++) {
+        for (int i = 0; i < numEsercizi; i++) {
             Esercizio esercizio = scheda.getEsercizio(i);
             Integer serie = esercizio.getSerie();
             numTotSerie += serie;
@@ -101,10 +103,15 @@ public class ClienteController implements Controller{
         }
         oraFine = new Time(System.currentTimeMillis());
         view.showMessage("Ora fine: "+ oraFine);
-        percentuale = (numSerieSvolte * 100) / numTotSerie;
+        if(numTotSerie == 0) {
+            view.showMessage("Non ci sono esercizi nella scheda!");
+            return;
+        } else {
+            percentuale = (numSerieSvolte * 100) / numTotSerie;
+        }
         sessione = new Sessione(CF, data, oraInizio, oraFine, scheda.getId(), percentuale);
         try {
-            new RegistraSessioneProcedureDAO().execute(sessione);
+            clienteDAO.registraSessione(sessione);
             view.showMessage("Sessione registrata correttamente!");
         } catch (DAOException e) {
             view.showError(e.getMessage());
@@ -113,7 +120,7 @@ public class ClienteController implements Controller{
 
     private void listaSchedeArchiviate() {
 
-        SchedaAllenamento scheda;
+        SchedaArchiviata scheda = null;
         List<SchedaArchiviata> lista;
         LocalDate dataInizio;
         LocalDate dataFine;
@@ -136,7 +143,7 @@ public class ClienteController implements Controller{
         }
 
         try {
-            lista  = new ListaArchiviateProcedureDAO().execute(CF, dataInizio, dataFine);
+            lista  = clienteDAO.listaArchiviate(CF, dataInizio, dataFine);
             if (lista.isEmpty()) {
                 view.showMessage("Non ci sono schede archiviate!");
                 return;
@@ -145,13 +152,22 @@ public class ClienteController implements Controller{
             StringBuilder sb = new StringBuilder();
             sb.append("******************* Schede archiviate dal " + dataInizio + " al " + dataFine + " *******************\n");
             for(SchedaArchiviata schedaArchiviata : lista) {
-                sb.append(schedaArchiviata);
+                sb.append(schedaArchiviata.toStringInfo());
             }
 
             view.showMessage(sb.toString());
 
             Integer idScheda = view.schedaArchiviata();
-            scheda = new SchedaArchiviataProcedureDAO().execute(CF, idScheda);
+            for (SchedaArchiviata schedaArchiviata : lista) {
+                if (schedaArchiviata.getId().equals(idScheda)) {
+                    scheda = schedaArchiviata;
+                    break;
+                }
+            }
+            if (scheda == null) {
+                view.showError("Scheda non trovata!");
+                return;
+            }
             view.showMessage(scheda.toString());
 
         } catch(DAOException | DateTimeException e) {

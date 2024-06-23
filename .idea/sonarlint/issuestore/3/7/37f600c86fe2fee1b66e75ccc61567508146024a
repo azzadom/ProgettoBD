@@ -1,0 +1,15 @@
+
+˜	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’ä¬×ùÿÿÿÿ8Ãâµ‰ƒ2J$576697ff-f15a-49dd-b43e-b3f29d365f99
+o
+java:S1128",Remove this unused import 'model.Esercizio'.(…ßÎ¹8Ìôµ‰ƒ2J$4c4c0581-6f9e-46a1-98ce-6d0c9d182076
+l
+java:S1128")Remove this unused import 'model.Report'.(İÚâ8Ìôµ‰ƒ2J$7d33db6e-5c0d-4ace-b25d-596e27b045d1
+t
+java:S1128"1Remove this unused import 'model.SchedaEsercizi'.(“”Ä8Ìôµ‰ƒ2J$45df9eb5-208b-41e9-a224-979cd86b549b
+x
+java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8Ìôµ‰ƒ2J$9ab00711-0299-49a4-87de-2fcb71cc5e5c
+x
+java:S1128	"0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ8Ìôµ‰ƒ2J$ac04bb1c-0016-4a3a-b2ce-a193ae5d5c30
+‚
+java:S1128
+"?Remove this unused import 'java.time.format.DateTimeFormatter'.(‰÷÷ª8Ìôµ‰ƒ2J$6991eb73-5cd0-4114-a8cc-eb8e9658f10a

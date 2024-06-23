@@ -28,6 +28,7 @@ public class SchedaAllenamento {
         esercizi.add(esercizio);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("****************************** Scheda "+ this.id +" ******************************\n");

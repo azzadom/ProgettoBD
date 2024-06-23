@@ -1,8 +1,7 @@
 package controller;
 
 import dao.ConnectionFactory;
-import dao.proprietario.ListaPersonalTrainerDAO;
-import dao.proprietario.*;
+import dao.ProprietarioDAO;
 import exception.DAOException;
 import model.*;
 import view.ProprietarioView;
@@ -12,9 +11,11 @@ import java.util.List;
 public class ProprietarioController implements Controller{
 
     private final ProprietarioView view;
+    private final ProprietarioDAO dao;
 
     public ProprietarioController() {
         view = new ProprietarioView();
+        dao = new ProprietarioDAO();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ProprietarioController implements Controller{
 
 
         try {
-            new InserisciEsercizioProcedureDAO().execute(esercizio);
+           dao.inserisciEsercizio(esercizio);
             view.showMessage("Inserimento eseguito correttamente!");
         } catch(DAOException e) {
             view.showError(e.getMessage());
@@ -71,7 +72,7 @@ public class ProprietarioController implements Controller{
         }
 
         try {
-            new InserisciMacchinarioProcedureDAO().execute(macchinario);
+            dao.inserisciMacchinario(macchinario);
             view.showMessage("Inserimento eseguito correttamente!");
         } catch(DAOException e) {
             view.showError(e.getMessage());
@@ -82,7 +83,12 @@ public class ProprietarioController implements Controller{
         List<Macchinario> listaMacchinari;
 
         try {
-            listaMacchinari = new ListaMacchinariProcedureDAO().execute();
+            listaMacchinari = dao.listaMacchinari();
+
+            if (listaMacchinari.isEmpty()){
+                view.showMessage("Nessun macchinario presente nel database.");
+                return;
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.append("******************* Lista Macchinari *******************\n");
@@ -100,7 +106,12 @@ public class ProprietarioController implements Controller{
         List<PersonalTrainer> listaPT;
 
         try {
-            listaPT = new ListaPersonalTrainerDAO().execute();
+            listaPT = dao.listaPersonalTrainer();
+
+            if (listaPT.isEmpty()){
+                view.showMessage("Nessun personal trainer presente nel database.");
+                return;
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.append("******************* Lista Personal Trainer *******************\n");
@@ -122,7 +133,7 @@ public class ProprietarioController implements Controller{
         cliente = new Cliente(data[0], data[1], data[2], data[3], data[4]);
 
         try {
-            new InserisciClienteProcedureDAO().execute(cliente);
+            dao.inserisciCliente(cliente);
             view.showMessage("Inserimento eseguito correttamente!");
         } catch(DAOException e) {
             view.showError(e.getMessage());
@@ -137,7 +148,7 @@ public class ProprietarioController implements Controller{
         personalTrainer = new PersonalTrainer(data[0], data[1], data[2], data[3]);
 
         try {
-            new InserisciPersonalProcedureDAO().execute(personalTrainer);
+            dao.inserisciPersonalTrainer(personalTrainer);
             view.showMessage("Inserimento eseguito correttamente!");
         } catch(DAOException e) {
             view.showError(e.getMessage());

@@ -35,6 +35,7 @@ public class Persona {
         return username;
     }
 
+    @Override
     public String toString(){
         return "CF: " + CF + " | Nome: " + nome + " | Cognome: " + cognome;
     }

@@ -19,10 +19,8 @@ public class PersonalTrainerView extends AbstractView{
     public String[] nuovaSchedaDati(){
         Scanner input = new Scanner(System.in);
         String[] data = new String[2];
-        System.out.println("Inserire il CF del cliente: ");
-        data[0] = input.nextLine();
         getInput(input, data, 0, "Inserire il CF del cliente: ");
-        getInput(input, data, 1, "Imserire la quantità di esercizi: ");
+        getInput(input, data, 1, "Inserire la quantità di esercizi: ");
         return data;
     }
 

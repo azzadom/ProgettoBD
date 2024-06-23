@@ -1,8 +1,7 @@
 package controller;
 
-import dao.login.UpdatePasswordProcedureDAO;
+import dao.LoginDAO;
 import exception.DAOException;
-import dao.login.LoginProcedureDAO;
 import model.Credenziali;
 import view.LoginView;
 
@@ -10,52 +9,72 @@ public class LoginController implements Controller{
 
     private Credenziali cred;
     private final LoginView view;
+    private final LoginDAO dao;
+
+    private boolean newPassword;
 
     public LoginController() {
         view = new LoginView();
+        newPassword = false;
+        dao = new LoginDAO();
     }
 
     public void start() {
-        int choice;
-        choice = view.showMenu();
+        while(true) {
+            int choice;
+            choice = view.showMenu();
 
-        switch(choice) {
-            case 1 -> login();
-            case 2 -> System.exit(0);
-            default -> throw new RuntimeException("Scelta non valida");
+            switch (choice) {
+                case 1 -> {
+                    login();
+                    return;
+                }
+                case 2 -> {
+                    newPassword = true;
+                    login();
+                }
+                case 3 -> System.exit(0);
+                default -> throw new RuntimeException("Scelta non valida");
+            }
         }
     }
 
-    public void login() {
+    private void login() {
         String[] credenziali;
 
         while (true) {
             credenziali = view.authenticate();
             try {
-                cred = new LoginProcedureDAO().execute(credenziali[0], credenziali[1]);
+                cred = dao.login(credenziali[0], credenziali[1]);
             } catch (DAOException e) {
-                throw new RuntimeException(e);
+                view.showError(e.getMessage());
             }
 
             if (cred.getRuolo() != null) {
                 break;
             } else if (cred.getRuolo() == null) {
-                System.out.println("Credenziali errate, riprovare.");
+                view.showError("Credenziali errate, riprovare.");
             }
         }
 
-        if(cred.getPassword().equals("Nuova")){
+        if(cred.getPassword().equals("Nuova") || newPassword){
             updatePassword();
         }
     }
 
     private void updatePassword(){
-        cred = new Credenziali(cred.getUsername(), view.updatePassword(), cred.getRuolo(), cred.getMatricola());
-
-        try {
-            new UpdatePasswordProcedureDAO().execute(cred.getUsername(), cred.getPassword());
-        } catch(DAOException e) {
-            throw new RuntimeException(e);
+        String password;
+        while(true) {
+            try {
+                password = view.updatePassword();
+                dao.updatePassword(cred.getUsername(), password);
+                cred = new Credenziali(cred.getUsername(), password, cred.getRuolo(), cred.getMatricola());
+                break;
+            } catch (DAOException e) {
+                view.showError(e.getMessage());
+            } finally {
+                newPassword = false;
+            }
         }
     }
 

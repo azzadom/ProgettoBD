@@ -14,10 +14,19 @@ public class SchedaArchiviata extends SchedaAllenamento{
         this.dataFine = dataFine;
     }
 
-    public String toString() {
+    public Date getDataInizio() {
+        return dataInizio;
+    }
+
+    public Date getDataFine() {
+        return dataFine;
+    }
+
+    public String toStringInfo() {
         StringBuilder sb = new StringBuilder();
         sb.append("Scheda " + this.getId()).append(" - ").append("Data Inizio " + this.dataInizio).append(" - ").append("Data Fine " + this.dataFine).append("\n");
         return sb.toString();
     }
+
 
 }

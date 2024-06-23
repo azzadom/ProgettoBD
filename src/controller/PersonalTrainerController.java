@@ -1,7 +1,7 @@
 package controller;
 
 import dao.ConnectionFactory;
-import dao.personal.*;
+import dao.PersonalTrainerDAO;
 import model.*;
 import view.PersonalTrainerView;
 import exception.DAOException;
@@ -15,10 +15,12 @@ public class PersonalTrainerController implements Controller{
 
     private final String CF;
     private final PersonalTrainerView view;
+    private final PersonalTrainerDAO dao;
 
     public PersonalTrainerController(String CF) {
         this.view = new PersonalTrainerView();
         this.CF = CF;
+        this.dao = new PersonalTrainerDAO();
     }
 
     public void start() {
@@ -64,7 +66,7 @@ public class PersonalTrainerController implements Controller{
         }
 
         try {
-            new AggiungiSchedaProcedureDAO().execute(this.CF,scheda);
+            dao.aggiungiScheda(this.CF, scheda);
         } catch(DAOException e) {
             view.showError(e.getMessage());
         }
@@ -93,7 +95,11 @@ public class PersonalTrainerController implements Controller{
 
 
         try {
-            report = new ReportProcedureDAO().execute(this.CF, cliente, dataInizio, dataFine);
+            report = dao.visualizzaReport(this.CF, cliente, dataInizio, dataFine);
+            if (report.getNumeroSessioni() == 0) {
+                view.showMessage("Non ci sono sessioni di allenamento registrate per il cliente nel periodo specificato.");
+                return;
+            }
             view.showMessage(report.toString());
         } catch (DateTimeException | DAOException e) {
             view.showError(e.getMessage());
@@ -106,7 +112,12 @@ public class PersonalTrainerController implements Controller{
         List<Cliente> listaClienti;
 
         try {
-            listaClienti = new ListaClientiProcedureDAO().execute(this.CF);
+            listaClienti = dao.listaClienti(this.CF);
+
+            if (listaClienti.isEmpty()){
+                view.showMessage("Non hai clienti registrati. Contattare il proprietario");
+                return;
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.append("******************* Lista Clienti *******************\n");
@@ -125,7 +136,12 @@ public class PersonalTrainerController implements Controller{
         List<Esercizio> listaEsercizi;
 
         try {
-            listaEsercizi = new ListaEserciziProcedureDAO().execute();
+            listaEsercizi = dao.listaEsercizi();
+
+            if (listaEsercizi.isEmpty()){
+                view.showMessage("Non ci sono esercizi registrati. Contattare il proprietario");
+                return;
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.append("******************* Lista Esercizi *******************\n");
