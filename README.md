@@ -1,6 +1,6 @@
 # Progetto Basi di Dati
 
-Project for the Database course with Professor Pellegrini at the University of Rome Tor Vergata.
+Project for the Basi di Dati course with Professor Pellegrini at the University of Rome Tor Vergata.
 
 ## Project Description
 
